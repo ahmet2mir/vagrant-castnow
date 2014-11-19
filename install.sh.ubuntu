@@ -1,0 +1,16 @@
+#!/bin/bash
+echo "Update packages"
+apt-get update  > /dev/null
+
+echo "Install curl libav-tools git ca-certificates"
+apt-get install -y --no-install-recommends curl libav-tools git ca-certificates  > /dev/null
+
+# echo "Create ffmpeg alias"
+# ln -s /usr/bin/avconv /usr/bin/ffmpeg  > /dev/null
+
+echo "Installing nodejs"
+curl -sL https://deb.nodesource.com/setup | bash -  > /dev/null
+apt-get install -y nodejs  > /dev/null
+
+echo "Installing castnow"
+npm install castnow -g  > /dev/null

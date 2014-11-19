@@ -10,9 +10,9 @@ Vagrant.configure VAGRANTFILE_API_VERSION do |config|
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
   config.vm.define :castnowvm do |pm|
-    pm.vm.box = "ubuntu/trusty32"
+    pm.vm.box = "chef/debian-7.4"
     pm.vm.hostname = "castnow"
-    config.vm.network "public_network", bridge: 'wlan0'
+    config.vm.network "public_network", bridge: 'wlan0: AhDy'
     pm.vm.provision :shell, :path => "install.sh"
   end
 
