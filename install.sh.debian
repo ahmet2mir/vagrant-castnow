@@ -1,20 +1,49 @@
 #!/bin/bash
 
+export DEBIAN_FRONTEND=noninteractive
+
 echo "Update Repo"
-cat > /etc/apt/sources.list <<EOF
+
+cat /dev/null > /etc/apt/sources.list
+cat /dev/null > /etc/apt/preferences
+
+cat > /etc/apt/sources.list.d/security.list <<EOF
+deb http://security.debian.org/ wheezy/updates main contrib non-free
+deb http://security.debian.org/ jessie/updates main contrib non-free
+EOF
+cat > /etc/apt/sources.list.d/wheezy.list <<EOF
 deb http://ftp.fr.debian.org/debian wheezy main contrib non-free
 deb http://ftp.debian.org/debian/ wheezy-updates main contrib non-free
-deb http://security.debian.org/ wheezy/updates main contrib non-free
+EOF
+cat > /etc/apt/sources.list.d/jessie.list <<EOF
+deb http://ftp.fr.debian.org/debian jessie main contrib non-free
+deb http://ftp.debian.org/debian/ jessie-updates main contrib non-free
+EOF
+cat > /etc/apt/preferences.d/security.pref <<EOF
+Package: *
+Pin: release l=Debian-Security
+Pin-Priority: 900
+EOF
+cat > /etc/apt/preferences.d/wheezy.pref <<EOF
+Package: *
+Pin: release a=wheezy
+Pin-Priority: 500
+EOF
+cat > /etc/apt/preferences.d/jessie.pref <<EOF
+Package: *
+Pin: release a=jessie
+Pin-Priority: 100
+EOF
+cat > /etc/apt/apt.conf.d/99defaultrelease <<EOF
+APT::Default-Release "wheezy";
 EOF
 
 echo "Update packages"
-apt-get update  > /dev/null
+aptitude update > /dev/null
 
 echo "Install curl ffmpeg git ca-certificates"
-apt-get install -y --no-install-recommends curl libav-tools git ca-certificates  > /dev/null
-
-echo "Create ffmpeg alias"
-ln -s /usr/bin/avconv /usr/bin/ffmpeg  > /dev/null
+apt-get install -y --no-install-recommends curl git ca-certificates > /dev/null
+apt-get install -y --no-install-recommends -t testing libav-tools > /dev/null
 
 echo "Installing nodejs"
 curl -sL https://deb.nodesource.com/setup | bash -  > /dev/null
